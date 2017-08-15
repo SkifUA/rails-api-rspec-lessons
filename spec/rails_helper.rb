@@ -13,6 +13,8 @@ require 'rspec/rails'
 require 'shoulda-matchers'
 # require 'support/factory_girl'
 
+Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
+
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|
     with.test_framework :rspec
@@ -21,7 +23,8 @@ Shoulda::Matchers.configure do |config|
 end
 
 RSpec.configuration do |config|
-  config.include FactoryGirl::Syntax::Methods
+
+  config.include RequestSpecHelper, type: :request
 
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)
@@ -85,4 +88,6 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+
+  config.include FactoryGirl::Syntax::Methods
 end
